@@ -10,7 +10,8 @@ public:
                 while (Serial.available())
                         Serial.read();
         }
-
+private:
+        Util();
 };
 
 #endif

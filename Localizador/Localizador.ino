@@ -18,7 +18,6 @@ void setup() {
 
 void loop() {
         dado.construir();
-
         if (dado.estahDisponivel()) {
                 persistencia.salvar(dado.toHTTPQueryString());
                 persistencia.listar();

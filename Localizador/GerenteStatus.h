@@ -10,9 +10,8 @@
 class GerenteStatus : public IStatusConsumidor
 {
 public:
-        GerenteStatus(int);
         ~GerenteStatus();
-
+        
         static GerenteStatus *obterInstancia(int);
         void atualizarStatusGlobal(IStatusProdutor &produtor);
         void adicionar(IStatusProdutor &produtor) override;
@@ -23,6 +22,8 @@ private:
         IStatusProdutor **produtores;
         int quantidade_produtores;
         Semaforo semaforoStatusGlobal;
+
+        GerenteStatus(int);
 };
 
 #endif

@@ -10,6 +10,9 @@ public:
         static void notificar(Semaforo semaforo);
         static void inicializar(void);
         static void limpar(void);
+
+private:
+        Led();
 };
 
 #endif
