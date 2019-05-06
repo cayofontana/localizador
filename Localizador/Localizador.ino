@@ -22,11 +22,13 @@ void setup() {
 }
 
 void loop() {
-        dado.construir();
-        if (dado.deveLer() && dado.leituraCompletou()) {
+        if (dado.deveLer()) {
                 dado.obterMensagemGPS();
-                //persistencia.salvar(dado.toHTTPQueryString());
-                //persistencia.listar();
-                //comunicacaoMovel.enviar(dado);
+                if (dado.leituraCompletou()) {
+                        //dado.construir();
+                        //persistencia.salvar(dado.toHTTPQueryString());
+                        //persistencia.listar();
+                        //comunicacaoMovel.enviar(dado);
+                }
         }
 }
