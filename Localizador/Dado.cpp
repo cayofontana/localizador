@@ -15,8 +15,6 @@ Dado::~Dado() {
 void
 Dado::inicializar(void) {
         SerialGPS.begin(9600);
-        while (!Serial)
-                continue;
 }
 
 bool
@@ -47,6 +45,7 @@ Dado::leituraCompletou(void) {
         if (proximaLeitura)   {
                 if (mensagem.startsWith("$GPRMC")) {
                         Serial.println(mensagem);
+                        construir();
                         leituraParada = true;
                 }
                 proximaLeitura = false;
@@ -63,34 +62,37 @@ Dado::toHTTPQueryString() {
 
 void
 Dado::construir(void) {
-        if (getDado(mensagem, ',', 2) == "A") {
-                hora = getDado(mensagem, ',', 1).toInt();
-                latitude = getDado(mensagem, ',', 3).toDouble();
-                orientacaoLatitude = getDado(mensagem, ',', 4).charAt(0);
-                longitude = getDado(mensagem, ',', 5).toDouble();
-                orientacaoLongitude = getDado(mensagem, ',', 6).charAt(0);
-                velocidade = getDado(mensagem, ',', 7).toDouble();
-                data = getDado(mensagem, ',', 9).toInt();
+        if (mensagem.indexOf(",A,") >= 0) {
+                hora = getDado(mensagem, ',', 1);
+                latitude = getDado(mensagem, ',', 3);
+                orientacaoLatitude = getDado(mensagem, ',', 4);
+                longitude = getDado(mensagem, ',', 5);
+                orientacaoLongitude = getDado(mensagem, ',', 6);
+                velocidade = getDado(mensagem, ',', 7);
+                data = getDado(mensagem, ',', 9);
                 Serial.println("Hora: " + hora);
+                Serial.println("Latitude: " + latitude);
+                Serial.println("Orientação Latitude: " + orientacaoLatitude);
+                Serial.println("Longitude: " + longitude);
+                Serial.println("Orientação Longitude: " + orientacaoLongitude);
+                Serial.println("velocidade: " + velocidade);
+                Serial.println("Data: " + data);
         }
 }
 
 String
-Dado::getDado(String mensagem, char separador, int indice)
+Dado::getDado(String mensagem, char separador, int vezesOcorrencia)
 {
-        int achou = 0;
-        int strIndex[] = { 0, -1 };
-        int indiceMaximo = mensagem.length() - 1;
-        
-        for (int i = 0; i <= indiceMaximo && achou <= indice; i++) {
-                if (mensagem.charAt(i) == separador || i == indiceMaximo) {
-                        achou++;
-                        strIndex[0] = strIndex[1] + 1;
-                        strIndex[1] = (i == indiceMaximo) ? i + 1 : i;
-                }
-        }
-        
-        return (achou > indice ? mensagem.substring(strIndex[0], strIndex[1]) : "");
+        int vezOcorrenciaAtual, indice, indiceFinal;
+        String mensagemParcial;
+
+        for (indice = vezOcorrenciaAtual = 0; vezOcorrenciaAtual < vezesOcorrencia; ++vezOcorrenciaAtual)
+                indice = mensagem.indexOf(separador, indice == 0 ? indice : indice + 1);
+
+        mensagemParcial = mensagem.substring(indice + 1);
+        indiceFinal = mensagemParcial.indexOf(separador);
+
+        return (mensagemParcial.substring(0, indiceFinal));
 }
 
 Status *

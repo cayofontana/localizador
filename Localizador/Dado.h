@@ -17,26 +17,26 @@ public:
         bool deveLer(void);
         void obterMensagemGPS(void);
         bool leituraCompletou(void);
-        void construir(void);
         String toHTTPQueryString(void);
         virtual Status *getStatus(void) override;
         virtual void statusMudou(Semaforo) override;
         
 private:
-        double latitude;
-        char orientacaoLatitude;
-        double longitude;
-        char orientacaoLongitude;
-        double velocidade;
-        uint32_t data;
-        uint32_t hora;
+        String latitude;
+        String orientacaoLatitude;
+        String longitude;
+        String orientacaoLongitude;
+        String velocidade;
+        String data;
+        String hora;
         Status *status;
 
         unsigned long testeAnterior;
         bool proximaLeitura;
         bool leituraParada;
         String mensagem;
-        
+
+        void construir(void);
         String getDado(String mensagem, char separador, int indice);
 };
 

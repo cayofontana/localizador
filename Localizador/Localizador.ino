@@ -12,11 +12,11 @@ ComunicacaoMovel comunicacaoMovel("zap.vivo.com.br", "vivo", "vivo", "201.140.23
 
 void setup() {
         Serial.begin(9600);
+        while (!Serial)
+                continue;
         gerenteStatus->adicionar(persistencia);
         gerenteStatus->adicionar(dado);
         gerenteStatus->adicionar(comunicacaoMovel);
-        while (!Serial)
-                continue;
         dado.inicializar();
         persistencia.inicializar();
 }
@@ -24,7 +24,7 @@ void setup() {
 void loop() {
         if (dado.deveLer()) {
                 dado.obterMensagemGPS();
-                if (dado.leituraCompletou()) {
+                if (!dado.leituraCompletou()) {
                         //dado.construir();
                         //persistencia.salvar(dado.toHTTPQueryString());
                         //persistencia.listar();
