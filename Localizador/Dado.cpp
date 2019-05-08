@@ -6,6 +6,7 @@ Dado::Dado(Status *status) : status(status) {
         proximaLeitura = false;
         leituraParada = false;
         mensagem = "";
+        atualizado = false;
 }
 
 Dado::~Dado() {
@@ -44,9 +45,9 @@ bool
 Dado::leituraCompletou(void) {
         if (proximaLeitura)   {
                 if (mensagem.startsWith("$GPRMC")) {
-                        Serial.println(mensagem);
                         construir();
                         leituraParada = true;
+                        atualizado = true;
                 }
                 proximaLeitura = false;
                 mensagem = "";
@@ -55,28 +56,33 @@ Dado::leituraCompletou(void) {
         return (!proximaLeitura);
 }
 
+bool
+Dado::atualizou(void) {
+        return (atualizado);
+}
+
+void
+Dado::reiniciar(void) {
+        atualizado = false;
+}
+
 String
 Dado::toHTTPQueryString() {
-        return ("lat=" + (String) latitude + "&lon=" + (String) longitude + "&vel=" + (String) velocidade + "&dth=" + (String) data + (String) hora);
+        // /cadastrodadogps.jsp?dis=A2-F3-00-28-31-E3&dth=20190502013537&lat=24.886&ola=W&lon=41.324&olo=S&vel=0.1
+        return ("dth=" + data + hora + "&lat=" + latitude + "&ola=" + orientacaoLatitude + "&lon=" + longitude + "&olo=" + orientacaoLatitude + "&vel=" + velocidade);
 }
 
 void
 Dado::construir(void) {
         if (mensagem.indexOf(",A,") >= 0) {
                 hora = getDado(mensagem, ',', 1);
+                hora = hora.substring(0, hora.indexOf("."));
                 latitude = getDado(mensagem, ',', 3);
                 orientacaoLatitude = getDado(mensagem, ',', 4);
                 longitude = getDado(mensagem, ',', 5);
                 orientacaoLongitude = getDado(mensagem, ',', 6);
                 velocidade = getDado(mensagem, ',', 7);
                 data = getDado(mensagem, ',', 9);
-                Serial.println("Hora: " + hora);
-                Serial.println("Latitude: " + latitude);
-                Serial.println("Orientação Latitude: " + orientacaoLatitude);
-                Serial.println("Longitude: " + longitude);
-                Serial.println("Orientação Longitude: " + orientacaoLongitude);
-                Serial.println("velocidade: " + velocidade);
-                Serial.println("Data: " + data);
         }
 }
 

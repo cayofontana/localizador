@@ -5,7 +5,7 @@
 #include "Status.h"
 
 #define SerialGPS Serial1
-#define INTERVALO 2
+#define INTERVALO 1
 
 class Dado : public IStatusProdutor
 {
@@ -18,6 +18,8 @@ public:
         void obterMensagemGPS(void);
         bool leituraCompletou(void);
         String toHTTPQueryString(void);
+        bool atualizou(void);
+        void reiniciar(void);
         virtual Status *getStatus(void) override;
         virtual void statusMudou(Semaforo) override;
         
@@ -35,6 +37,8 @@ private:
         bool proximaLeitura;
         bool leituraParada;
         String mensagem;
+
+        bool atualizado;
 
         void construir(void);
         String getDado(String mensagem, char separador, int indice);

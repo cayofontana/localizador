@@ -24,11 +24,11 @@ void setup() {
 void loop() {
         if (dado.deveLer()) {
                 dado.obterMensagemGPS();
-                if (!dado.leituraCompletou()) {
-                        //dado.construir();
-                        //persistencia.salvar(dado.toHTTPQueryString());
-                        //persistencia.listar();
+                if (dado.leituraCompletou() && dado.atualizou()) {
+                        persistencia.salvar(&dado);
+                        persistencia.listar();
                         //comunicacaoMovel.enviar(dado);
+                        dado.reiniciar();
                 }
         }
 }

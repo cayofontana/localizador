@@ -18,11 +18,11 @@ Persistencia::inicializar(void) {
 }
 
 bool
-Persistencia::salvar(String strHTTPQueryString) {
+Persistencia::salvar(Dado *dado) {
         arquivo = SD.open(nomeArquivo, FILE_WRITE);
         
         if (arquivo) {
-                arquivo.println(strHTTPQueryString);
+                arquivo.println(dado->toHTTPQueryString());
                 arquivo.close();
                 statusMudou(Semaforo::NORMAL);
                 return (true);
