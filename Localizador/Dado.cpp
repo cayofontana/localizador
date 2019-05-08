@@ -45,9 +45,9 @@ bool
 Dado::leituraCompletou(void) {
         if (proximaLeitura)   {
                 if (mensagem.startsWith("$GPRMC")) {
-                        construir();
+                        if (construir())
+                                atualizado = true;
                         leituraParada = true;
-                        atualizado = true;
                 }
                 proximaLeitura = false;
                 mensagem = "";
@@ -72,7 +72,7 @@ Dado::toHTTPQueryString() {
         return ("dth=" + data + hora + "&lat=" + latitude + "&ola=" + orientacaoLatitude + "&lon=" + longitude + "&olo=" + orientacaoLatitude + "&vel=" + velocidade);
 }
 
-void
+bool
 Dado::construir(void) {
         if (mensagem.indexOf(",A,") >= 0) {
                 hora = getDado(mensagem, ',', 1);
@@ -83,7 +83,11 @@ Dado::construir(void) {
                 orientacaoLongitude = getDado(mensagem, ',', 6);
                 velocidade = getDado(mensagem, ',', 7);
                 data = getDado(mensagem, ',', 9);
+
+                return (true);
         }
+
+        return (false);
 }
 
 String

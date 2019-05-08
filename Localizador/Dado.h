@@ -40,7 +40,7 @@ private:
 
         bool atualizado;
 
-        void construir(void);
+        bool construir(void);
         String getDado(String mensagem, char separador, int indice);
 };
 
