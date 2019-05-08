@@ -5,7 +5,7 @@
 #include "Status.h"
 
 #define SerialGPS Serial1
-#define INTERVALO 1
+#define INTERVALO 30
 
 class Dado : public IStatusProdutor
 {
