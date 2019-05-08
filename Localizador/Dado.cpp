@@ -68,8 +68,7 @@ Dado::reiniciar(void) {
 
 String
 Dado::toHTTPQueryString() {
-        // /cadastrodadogps.jsp?dis=A2-F3-00-28-31-E3&dth=20190502013537&lat=24.886&ola=W&lon=41.324&olo=S&vel=0.1
-        return ("dth=" + data + hora + "&lat=" + latitude + "&ola=" + orientacaoLatitude + "&lon=" + longitude + "&olo=" + orientacaoLatitude + "&vel=" + velocidade);
+        return ("dis=A2-F3-00-28-31-E3&dth=" + data + hora + "&lat=" + latitude + "&ola=" + orientacaoLatitude + "&lon=" + longitude + "&olo=" + orientacaoLatitude + "&vel=" + velocidade);
 }
 
 bool
