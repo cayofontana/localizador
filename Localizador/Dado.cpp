@@ -82,6 +82,7 @@ Dado::construir(void) {
                 orientacaoLongitude = getDado(mensagem, ',', 6);
                 velocidade = getDado(mensagem, ',', 7);
                 data = getDado(mensagem, ',', 9);
+                data = "20" + data.substring(4, 6) + data.substring(2, 4) + data.substring(0, 2);
 
                 return (true);
         }

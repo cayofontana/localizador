@@ -19,13 +19,17 @@ void
 ComunicacaoMovel::conectar(void) {
         bool conectado = false;
 
-        while (!conectado)
+        while (!conectado) {
                 if ((gsm.begin(CODIGO_PIN) == GSM_READY) && (gprs.attachGPRS(gprsAPN, gprsUsuario, gprsSenha) == GPRS_READY)) {
                         conectado = true;
-                        Led::notificar(Semaforo::NORMAL);
+                        //Led::notificar(Semaforo::NORMAL);
+                        Serial.println("Conectou!");
                 }
-                else
-                        Led::notificar(Semaforo::ATENCAO);
+                else {
+                        //Led::notificar(Semaforo::ATENCAO);
+                        Serial.println("Não conectou.");
+                }
+        }
 }
 
 
@@ -35,18 +39,23 @@ ComunicacaoMovel::enviar(Dado dado) {
         
         if (clienteGSM.connect(servidor, porta)) {
                 clienteGSM.print("GET ");
-                clienteGSM.print(endereco + (String) "?" + dado.toHTTPQueryString());
+                Serial.println((String) "/" + endereco + (String) "?" + dado.toHTTPQueryString());
+                clienteGSM.print((String) "/" + endereco + (String) "?" + dado.toHTTPQueryString());
                 clienteGSM.println(" HTTP/1.1");
                 clienteGSM.print("Host: ");
                 clienteGSM.println(servidor);
                 clienteGSM.println("Connection: close");
                 clienteGSM.println();
                 
-                Led::notificar(Semaforo::NORMAL);
+                //Led::notificar(Semaforo::NORMAL);
+                Serial.println("Enviou.");
         }
         else {
-                Led::notificar(Semaforo::ALERTA);
+                //Led::notificar(Semaforo::ALERTA);
+                Serial.println("Não enviou.");
         }
+
+        ler();
 
         desconectar();
 }
@@ -55,15 +64,18 @@ void
 ComunicacaoMovel::desconectar(void) {
         if (!clienteGSM.available() && !clienteGSM.connected()) {
                 clienteGSM.stop();
+                Serial.println("Desconectou!");
         }
 }
 
 void
 ComunicacaoMovel::ler(void) {
-        if (clienteGSM.available()) {
+        Serial.println("Início da leitura da resposta HTTP...");
+        while (clienteGSM.available()) {
                 char caractere = clienteGSM.read();
                 Serial.print(caractere);
         }
+        Serial.println("Término da leitura da resposta HTTP!");
 }
 
 Status *

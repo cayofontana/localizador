@@ -14,7 +14,6 @@ public:
         ~ComunicacaoMovel();
         
         bool enviar(Dado dado);
-        void ler(void);
         virtual Status *getStatus(void) override;
         virtual void statusMudou(Semaforo) override;
         
@@ -32,6 +31,7 @@ private:
 
         void conectar(void);
         void desconectar(void);
+        void ler(void);
 };
 
 #endif
