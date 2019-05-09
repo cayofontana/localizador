@@ -27,7 +27,7 @@ void loop() {
                 if (dado.leituraCompletou() && dado.atualizou()) {
                         persistencia.salvar(&dado);
                         persistencia.listar();
-                        comunicacaoMovel.enviar(dado);
+                        //comunicacaoMovel.enviar(dado);
                         dado.reiniciar();
                 }
         }
