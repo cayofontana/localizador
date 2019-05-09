@@ -13,7 +13,7 @@ public:
         ComunicacaoMovel(const char *GPRS_APN, const char *GPRS_USUARIO, const char *GPRS_SENHA, const char *servidor, const char *endereco, uint8_t porta, Status *status);
         ~ComunicacaoMovel();
         
-        bool enviar(Dado dado);
+        bool enviar(Dado *dado);
         virtual Status *getStatus(void) override;
         virtual void statusMudou(Semaforo) override;
         

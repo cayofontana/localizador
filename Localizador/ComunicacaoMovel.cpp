@@ -34,30 +34,83 @@ ComunicacaoMovel::conectar(void) {
 
 
 bool
-ComunicacaoMovel::enviar(Dado dado) {
-        conectar();
+ComunicacaoMovel::enviar(Dado *dado) {
+        Serial.print("Conectando a rede GSM...");
+                while (gsm.begin(CODIGO_PIN) != GSM_READY) {
+                Serial.println("Erro!");
+                delay(2500);
+        }
+        Serial.println("GSM Ok!");
         
-        if (clienteGSM.connect(servidor, porta)) {
-                clienteGSM.print("GET ");
-                Serial.println((String) "/" + endereco + (String) "?" + dado.toHTTPQueryString());
-                clienteGSM.print((String) "/" + endereco + (String) "?" + dado.toHTTPQueryString());
-                clienteGSM.println(" HTTP/1.1");
-                clienteGSM.print("Host: ");
-                clienteGSM.println(servidor);
-                clienteGSM.println("Connection: close");
-                clienteGSM.println();
-                
-                //Led::notificar(Semaforo::NORMAL);
-                Serial.println("Enviou.");
+        Serial.println("Conectando a rede de telefonia...");
+        if (gprs.attachGPRS(gprsAPN, gprsUsuario, gprsSenha) != GPRS_READY) {
+                Serial.println("Erro");
         }
         else {
-                //Led::notificar(Semaforo::ALERTA);
-                Serial.println("Não enviou.");
+                Serial.println("Ok!");
+                Serial.print("Connecting and sending GET request to example.org...");
+                
+                int respostaConexao = clienteGSM.connect(servidor, 8080);
+                
+                String strHttpQueryString = dado->toHTTPQueryString();
+                char httpQueryString[sizeof(strHttpQueryString)];
+                strHttpQueryString.toCharArray(httpQueryString, sizeof(strHttpQueryString));
+                
+                if (respostaConexao) {
+                        clienteGSM.print("GET ");
+                        clienteGSM.print(endereco + strHttpQueryString);
+                        clienteGSM.println(" HTTP/1.0");
+                        clienteGSM.println();
+                        Serial.println("Enviado!");
+                }
+                else {
+                        Serial.println("ERRO!");
+                }
+                Serial.print("Recebendo resposta...");
+                String respostaHTTP = "";
+                bool teste = true;
+                while (teste) {
+                        if (clienteGSM.available()) {
+                                char c = clienteGSM.read();
+                                respostaHTTP += c;
+                                char responsechar[respostaHTTP.length() + 1];
+                                respostaHTTP.toCharArray(responsechar, respostaHTTP.length() + 1);
+                                if (strstr(responsechar, "200 OK") != NULL) {
+                                        Serial.println("ok");
+                                        Serial.println("TEST COMPLETE!");
+                                        teste = false;
+                                }
+                        }
+                        if (!clienteGSM.connected()) {
+                                Serial.println();
+                                Serial.println("disconnecting.");
+                                clienteGSM.stop();
+                                teste = false;
+                        }
+                }
         }
-
-        ler();
-
-        desconectar();
+//        String strHttpQueryString = dado.toHTTPQueryString();
+//        char httpQueryString[sizeof(strHttpQueryString)];
+//        strHttpQueryString.toCharArray(httpQueryString, sizeof(strHttpQueryString));
+//        conectar();
+//        
+//        if (clienteGSM.connect(servidor, porta)) {
+//                clienteGSM.print("GET ");
+//                clienteGSM.print(endereco + strHttpQueryString);
+//                clienteGSM.println(" HTTP/1.0");
+//                clienteGSM.println();
+//                
+//                //Led::notificar(Semaforo::NORMAL);
+//                Serial.println("Enviou.");
+//        }
+//        else {
+//                //Led::notificar(Semaforo::ALERTA);
+//                Serial.println("Não enviou.");
+//        }
+//
+//        ler();
+//
+//        desconectar();
 }
 
 void
@@ -70,12 +123,10 @@ ComunicacaoMovel::desconectar(void) {
 
 void
 ComunicacaoMovel::ler(void) {
-        Serial.println("Início da leitura da resposta HTTP...");
         while (clienteGSM.available()) {
                 char caractere = clienteGSM.read();
                 Serial.print(caractere);
         }
-        Serial.println("Término da leitura da resposta HTTP!");
 }
 
 Status *
