@@ -29,7 +29,7 @@ private:
         uint8_t porta;
         Status *status;
 
-        void conectar(void);
+        bool conectar(void);
         void desconectar(void);
         void ler(void);
 };
