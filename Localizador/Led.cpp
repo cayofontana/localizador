@@ -1,6 +1,13 @@
 #include "Led.h"
 
 void
+Led::inicializar(void) {
+        pinMode((int) Semaforo::NORMAL, OUTPUT);
+        pinMode((int) Semaforo::ATENCAO, OUTPUT);
+        pinMode((int) Semaforo::ALERTA, OUTPUT);
+}
+
+void
 Led::notificar(Semaforo semaforo) {
         limpar();
         switch (semaforo)
@@ -17,11 +24,14 @@ Led::notificar(Semaforo semaforo) {
         }  
 }
 
+void 
+Led::ligar(uint8_t pino) {
+        digitalWrite(pino, HIGH);
+}
+
 void
-Led::inicializar(void) {
-        pinMode((int) Semaforo::NORMAL, OUTPUT);
-        pinMode((int) Semaforo::ATENCAO, OUTPUT);
-        pinMode((int) Semaforo::ALERTA, OUTPUT);
+Led::desligar(uint8_t pino) {
+        digitalWrite(pino, LOW);
 }
 
 void

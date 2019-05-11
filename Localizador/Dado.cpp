@@ -1,6 +1,8 @@
 #include "Dado.h"
 
-Dado::Dado(Status *status) : status(status) {
+Dado::Dado(uint8_t pinoLed, Status *status) : status(status) {
+        this->pinoLed = pinoLed;
+        pinMode(pinoLed, OUTPUT);
         this->status = status;
         testeAnterior = 0;
         proximaLeitura = false;
@@ -32,13 +34,19 @@ Dado::deveLer(void) {
 void
 Dado::obterMensagemGPS() {
         char caractere;
-        
-        if ((SerialGPS.available() > 0) && !proximaLeitura && !leituraParada) {
-                if ((caractere = SerialGPS.read()) == '\n')
-                        proximaLeitura = true;
-                else
-                        mensagem += caractere;
+
+        if (SerialGPS.available() > 0) {
+                Led::ligar(pinoLed);
+                statusMudou(Semaforo::NORMAL);
+                if (!proximaLeitura && !leituraParada) {
+                        if ((caractere = SerialGPS.read()) == '\n')
+                                proximaLeitura = true;
+                        else
+                                mensagem += caractere;
+                }
         }
+        else
+                statusMudou(Semaforo::ALERTA);
 }
 
 bool
@@ -52,6 +60,8 @@ Dado::leituraCompletou(void) {
                 proximaLeitura = false;
                 mensagem = "";
         }
+
+        Led::desligar(pinoLed);
 
         return (!proximaLeitura);
 }
@@ -84,8 +94,12 @@ Dado::construir(void) {
                 data = getDado(mensagem, ',', 9);
                 data = "20" + data.substring(4, 6) + data.substring(2, 4) + data.substring(0, 2);
 
+                statusMudou(Semaforo::NORMAL);
+
                 return (true);
         }
+
+        statusMudou(Semaforo::ALERTA);
 
         return (false);
 }

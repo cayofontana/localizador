@@ -10,7 +10,7 @@
 class Dado : public IStatusProdutor
 {
 public:
-        Dado(Status *status);
+        Dado(uint8_t pinoLed, Status *status);
         ~Dado();
 
         void inicializar(void);
@@ -32,6 +32,7 @@ private:
         String data;
         String hora;
         Status *status;
+        uint8_t pinoLed;
 
         unsigned long testeAnterior;
         bool proximaLeitura;

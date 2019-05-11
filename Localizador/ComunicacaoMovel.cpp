@@ -1,7 +1,7 @@
 #include "ComunicacaoMovel.h"
 
 
-ComunicacaoMovel::ComunicacaoMovel(const char *gprsAPN, const char *gprsUsuario, const char *gprsSenha, const char *servidor, const char *endereco, uint8_t porta, Status *status) {
+ComunicacaoMovel::ComunicacaoMovel(const char *gprsAPN, const char *gprsUsuario, const char *gprsSenha, const char *servidor, const char *endereco, uint8_t porta, uint8_t pinoLed, Status *status) {
         this->gprsAPN = gprsAPN;
         this->gprsUsuario = gprsUsuario;
         this->gprsSenha = gprsSenha;
@@ -9,6 +9,7 @@ ComunicacaoMovel::ComunicacaoMovel(const char *gprsAPN, const char *gprsUsuario,
         this->endereco = endereco;
         this->porta = porta;
         this->status = status;
+        this->pinoLed = pinoLed;
 }
 
 ComunicacaoMovel::~ComunicacaoMovel() {
@@ -18,20 +19,21 @@ ComunicacaoMovel::~ComunicacaoMovel() {
 bool
 ComunicacaoMovel::conectar(void) {
         while (gsm.begin(CODIGO_PIN) != GSM_READY) {
-                //statusMudou(Semaforo::ALERTA);
+                statusMudou(Semaforo::ALERTA);
                 delay(2500);
         }
         if (gprs.attachGPRS(gprsAPN, gprsUsuario, gprsSenha) != GPRS_READY) {
-                //statusMudou(Semaforo::ALERTA);
+                statusMudou(Semaforo::ALERTA);
                 return (false);
         }
-        //statusMudou(Semaforo::NORMAL);
+        statusMudou(Semaforo::NORMAL);
         return (true);
 }
 
 bool
 ComunicacaoMovel::enviar(Dado *dado) {
         if (conectar()) {
+                Led::ligar(pinoLed);
                 int respostaConexao = clienteGSM.connect(servidor, 8080);                
                 String strHttpQueryString = dado->toHTTPQueryString();
                 char httpQueryString[sizeof(strHttpQueryString)];
@@ -43,12 +45,13 @@ ComunicacaoMovel::enviar(Dado *dado) {
                         clienteGSM.println(" HTTP/1.0");
                         clienteGSM.println();
                         Serial.println("Enviado!");
-                        //statusMudou(Semaforo::NORMAL);
+                        statusMudou(Semaforo::NORMAL);
                 }
                 else {
                         Serial.println("ERRO!");
-                        //statusMudou(Semaforo::ALERTA);
+                        statusMudou(Semaforo::ALERTA);
                 }
+                Led::desligar(pinoLed);
                 ler();
         }
         desconectar();

@@ -10,7 +10,7 @@
 class ComunicacaoMovel : public IStatusProdutor
 {
 public:
-        ComunicacaoMovel(const char *GPRS_APN, const char *GPRS_USUARIO, const char *GPRS_SENHA, const char *servidor, const char *endereco, uint8_t porta, Status *status);
+        ComunicacaoMovel(const char *GPRS_APN, const char *GPRS_USUARIO, const char *GPRS_SENHA, const char *servidor, const char *endereco, uint8_t porta, uint8_t pinoLed, Status *status);
         ~ComunicacaoMovel();
         
         bool enviar(Dado *dado);
@@ -28,6 +28,7 @@ private:
         const char *endereco;
         uint8_t porta;
         Status *status;
+        uint8_t pinoLed;
 
         bool conectar(void);
         void desconectar(void);
