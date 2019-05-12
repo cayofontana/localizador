@@ -35,18 +35,16 @@ void
 Dado::obterMensagemGPS() {
         char caractere;
 
-        if (SerialGPS.available() > 0) {
+        if (!proximaLeitura && !leituraParada) {
                 Led::ligar(pinoLed);
-                statusMudou(Semaforo::NORMAL);
-                if (!proximaLeitura && !leituraParada) {
+                if (SerialGPS.available() > 0) {
+                        statusMudou(Semaforo::NORMAL);
                         if ((caractere = SerialGPS.read()) == '\n')
                                 proximaLeitura = true;
                         else
                                 mensagem += caractere;
                 }
         }
-        else
-                statusMudou(Semaforo::ALERTA);
 }
 
 bool

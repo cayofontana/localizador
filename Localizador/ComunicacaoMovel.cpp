@@ -39,7 +39,7 @@ ComunicacaoMovel::enviar(Dado *dado) {
                 char httpQueryString[sizeof(strHttpQueryString)];
                 strHttpQueryString.toCharArray(httpQueryString, sizeof(strHttpQueryString));
                 
-                if (respostaConexao) {
+                if (respostaConexao > 0) {
                         clienteGSM.print("GET ");
                         clienteGSM.print(endereco + strHttpQueryString);
                         clienteGSM.println(" HTTP/1.0");

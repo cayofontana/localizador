@@ -3,8 +3,6 @@
 Status::Status(GerenteStatus *gerenteStatus) {
         this->gerenteStatus = gerenteStatus;
         semaforo = Semaforo::NORMAL;
-        Led::inicializar();
-        Led::limpar();
 }
 
 Status::~Status() {

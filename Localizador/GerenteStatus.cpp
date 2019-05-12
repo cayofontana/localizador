@@ -7,6 +7,13 @@ GerenteStatus::GerenteStatus(int quantidade_produtores) {
         this->quantidade_produtores = 0;
         produtores = new IStatusProdutor *[quantidade_produtores];
         semaforoStatusGlobal = Semaforo::ATENCAO;
+
+        // LEDS SENDO INICIALIZADOS, PALIATIVAMENTE, NO CONSTRUTOR DE GERENTESTATUS.
+        // ESTE TRECHO DEVE SER MOVIDO PARA DENTRO DO MÉTODO setup() DO ARQUIVO .ino
+        Led::inicializar();
+        Led::limpar();
+        // FIM DO TRECHO
+        
         notificar(semaforoStatusGlobal);
 }
 
