@@ -12,8 +12,9 @@ ComunicacaoMovel comunicacaoMovel("zap.vivo.com.br", "vivo", "vivo", "201.140.23
 
 void setup() {
         Serial.begin(9600);
-        while (!Serial)
-                continue;
+        // USADO PARA USB-CDC APENAS
+//        while (!Serial)
+//                continue;
         gerenteStatus->adicionar(persistencia);
         gerenteStatus->adicionar(dado);
         gerenteStatus->adicionar(comunicacaoMovel);
