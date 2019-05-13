@@ -10,6 +10,7 @@ ComunicacaoMovel::ComunicacaoMovel(const char *gprsAPN, const char *gprsUsuario,
         this->porta = porta;
         this->status = status;
         this->pinoLed = pinoLed;
+        pinMode(pinoLed, OUTPUT);
 }
 
 ComunicacaoMovel::~ComunicacaoMovel() {
@@ -18,6 +19,7 @@ ComunicacaoMovel::~ComunicacaoMovel() {
 
 bool
 ComunicacaoMovel::conectar(void) {
+        Led::ligar(pinoLed);
         while (gsm.begin(CODIGO_PIN) != GSM_READY) {
                 statusMudou(Semaforo::ALERTA);
                 delay(2500);
@@ -33,7 +35,6 @@ ComunicacaoMovel::conectar(void) {
 bool
 ComunicacaoMovel::enviar(Dado *dado) {
         if (conectar()) {
-                Led::ligar(pinoLed);
                 int respostaConexao = clienteGSM.connect(servidor, 8080);                
                 String strHttpQueryString = dado->toHTTPQueryString();
                 char httpQueryString[sizeof(strHttpQueryString)];
@@ -51,7 +52,6 @@ ComunicacaoMovel::enviar(Dado *dado) {
                         Serial.println("ERRO!");
                         statusMudou(Semaforo::ALERTA);
                 }
-                Led::desligar(pinoLed);
                 ler();
         }
         desconectar();
@@ -61,6 +61,7 @@ void
 ComunicacaoMovel::desconectar(void) {
         if (!clienteGSM.connected())
                 clienteGSM.stop();
+        Led::desligar(pinoLed);
 }
 
 void
