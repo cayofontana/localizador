@@ -33,10 +33,9 @@ void
 GerenteStatus::atualizarStatusGlobal(IStatusProdutor &produtor) {
         
         Semaforo semaforoAtual = semaforoStatusGlobal;
-        Status *status = dynamic_cast<IStatusProdutor&>(produtor).getStatus();
 
-        if (status->getSemaforo() != semaforoStatusGlobal)
-                semaforoStatusGlobal = status->getSemaforo();
+        if (dynamic_cast<IStatusProdutor&>(produtor).getStatus()->getSemaforo() != semaforoStatusGlobal)
+                semaforoStatusGlobal = dynamic_cast<IStatusProdutor&>(produtor).getStatus()->getSemaforo();
 
         for (int i = 0; i < quantidade_produtores; ++i)
                 if (produtores[i] != &produtor && produtores[i]->getStatus()->getSemaforo() > semaforoStatusGlobal)
