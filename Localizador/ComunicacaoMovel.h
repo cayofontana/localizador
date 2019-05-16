@@ -7,6 +7,8 @@
 
 #define CODIGO_PIN ""
 
+const int maximoTentativaConexoes = 5;
+
 class ComunicacaoMovel : public IStatusProdutor
 {
 public:

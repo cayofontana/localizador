@@ -20,10 +20,15 @@ ComunicacaoMovel::~ComunicacaoMovel() {
 bool
 ComunicacaoMovel::conectar(void) {
         Led::ligar(pinoLed);
-        while (gsm.begin(CODIGO_PIN) != GSM_READY) {
+
+        int i = 0;
+        while (gsm.begin(CODIGO_PIN) != GSM_READY || i++ < maximoTentativaConexoes) {
                 statusMudou(Semaforo::ALERTA);
                 delay(2500);
         }
+        if (i >= maximoTentativaConexoes)
+                return (false);
+        
         if (gprs.attachGPRS(gprsAPN, gprsUsuario, gprsSenha) != GPRS_READY) {
                 statusMudou(Semaforo::ALERTA);
                 return (false);
@@ -52,7 +57,7 @@ ComunicacaoMovel::enviar(Dado *dado) {
                         Serial.println("ERRO!");
                         statusMudou(Semaforo::ALERTA);
                 }
-                ler();
+                // ler();
         }
         desconectar();
 }
