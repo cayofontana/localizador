@@ -22,16 +22,11 @@ ComunicacaoMovel::conectar(void) {
         Led::ligar(pinoLed);
 
         int i = 0;
-        while (gsm.begin(CODIGO_PIN) != GSM_READY || i++ < maximoTentativaConexoes) {
+        while (gsm.begin(CODIGO_PIN) != GSM_READY || gprs.attachGPRS(gprsAPN, gprsUsuario, gprsSenha) != GPRS_READY) {
                 statusMudou(Semaforo::ALERTA);
+                if (++i > maximoTentativaConexoes)
+                        return (false);
                 delay(2500);
-        }
-        if (i >= maximoTentativaConexoes)
-                return (false);
-        
-        if (gprs.attachGPRS(gprsAPN, gprsUsuario, gprsSenha) != GPRS_READY) {
-                statusMudou(Semaforo::ALERTA);
-                return (false);
         }
         statusMudou(Semaforo::NORMAL);
         return (true);
