@@ -35,12 +35,10 @@ ComunicacaoMovel::conectar(void) {
 bool
 ComunicacaoMovel::enviar(Dado *dado) {
         if (conectar()) {
-                int respostaConexao = clienteGSM.connect(servidor, 8080);                
-                String strHttpQueryString = dado->toHTTPQueryString();
-                char httpQueryString[sizeof(strHttpQueryString)];
-                strHttpQueryString.toCharArray(httpQueryString, sizeof(strHttpQueryString));
-                
-                if (respostaConexao > 0) {
+                if (clienteGSM.connect(servidor, 8080)) {
+                        String strHttpQueryString = dado->toHTTPQueryString();
+                        char httpQueryString[sizeof(strHttpQueryString)];
+                        strHttpQueryString.toCharArray(httpQueryString, sizeof(strHttpQueryString));
                         clienteGSM.print("GET ");
                         clienteGSM.print(endereco + strHttpQueryString);
                         clienteGSM.println(" HTTP/1.0");
