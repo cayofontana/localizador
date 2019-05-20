@@ -76,7 +76,7 @@ Dado::reiniciar(void) {
 
 String
 Dado::toHTTPQueryString() {
-        return ("dis=A2-F3-00-28-31-E3&dth=" + data + hora + "&lat=" + latitude + "&ola=" + orientacaoLatitude + "&lon=" + longitude + "&olo=" + orientacaoLatitude + "&vel=" + velocidade);
+        return ("dis=A2-F3-00-28-31-E3&dth=" + data + hora + "&lat=" + latitude + "&ola=" + orientacaoLatitude + "&lon=" + longitude + "&olo=" + orientacaoLongitude + "&vel=" + velocidade);
 }
 
 bool
