@@ -18,7 +18,9 @@ void setup() {
         gerenteStatus->adicionar(persistencia);
         gerenteStatus->adicionar(dado);
         gerenteStatus->adicionar(comunicacaoMovel);
+        
         dado.inicializar();
+        comunicacaoMovel.inicializar();
         persistencia.inicializar();
 }
 

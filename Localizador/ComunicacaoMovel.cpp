@@ -17,10 +17,15 @@ ComunicacaoMovel::~ComunicacaoMovel() {
         desconectar();
 }
 
+void
+ComunicacaoMovel::inicializar(void) {
+        conectar();
+}
+
 bool
 ComunicacaoMovel::conectar(void) {
-        Led::ligar(pinoLed);
-
+        desconectar();
+        
         int i = 0;
         while (gsm.begin(CODIGO_PIN) != GSM_READY || gprs.attachGPRS(gprsAPN, gprsUsuario, gprsSenha) != GPRS_READY) {
                 statusMudou(Semaforo::ALERTA);
@@ -34,32 +39,34 @@ ComunicacaoMovel::conectar(void) {
 
 bool
 ComunicacaoMovel::enviar(Dado *dado) {
-        if (conectar()) {
+        Led::ligar(pinoLed);
+        if (clienteGSM.connected() || conectar()) {
                 if (clienteGSM.connect(servidor, 8080)) {
                         String strHttpQueryString = dado->toHTTPQueryString();
-                        char httpQueryString[sizeof(strHttpQueryString)];
-                        strHttpQueryString.toCharArray(httpQueryString, sizeof(strHttpQueryString));
+                        
                         clienteGSM.print("GET ");
                         clienteGSM.print(endereco + strHttpQueryString);
                         clienteGSM.println(" HTTP/1.0");
                         clienteGSM.println();
                         Serial.println("Enviado!");
                         statusMudou(Semaforo::NORMAL);
+                        Led::desligar(pinoLed);
+                        return (true);
                 }
                 else {
                         Serial.println("ERRO!");
                         statusMudou(Semaforo::ALERTA);
+                        Led::desligar(pinoLed);
+                        return (false);
                 }
-                // ler();
         }
-        desconectar();
 }
 
 void
 ComunicacaoMovel::desconectar(void) {
         if (!clienteGSM.connected())
                 clienteGSM.stop();
-        Led::desligar(pinoLed);
+        gsm.shutdown();
 }
 
 void
