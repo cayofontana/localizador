@@ -39,26 +39,23 @@ ComunicacaoMovel::conectar(void) {
 
 bool
 ComunicacaoMovel::enviar(Dado *dado) {
-        if (clienteGSM.connected() || conectar()) {
+        if (clienteGSM.connected() || clienteGSM.connect(servidor, 8080)) {
                 Led::ligar(pinoLed);
-                if (clienteGSM.connect(servidor, 8080)) {
-                        String strHttpQueryString = dado->toHTTPQueryString();
-                        
-                        clienteGSM.print("GET ");
-                        clienteGSM.print(endereco + strHttpQueryString);
-                        clienteGSM.println(" HTTP/1.0");
-                        clienteGSM.println();
-                        Serial.println("Enviado!");
-                        statusMudou(Semaforo::NORMAL);
-                        Led::desligar(pinoLed);
-                        return (true);
-                }
-                else {
-                        Serial.println("ERRO!");
-                        statusMudou(Semaforo::ALERTA);
-                        Led::desligar(pinoLed);
-                        return (false);
-                }
+                
+                String strHttpQueryString = dado->toHTTPQueryString();                
+                clienteGSM.print("GET ");
+                clienteGSM.print(endereco + strHttpQueryString);
+                clienteGSM.println(" HTTP/1.0");
+                clienteGSM.println();
+                statusMudou(Semaforo::NORMAL);
+                Led::desligar(pinoLed);
+                return (true);
+        }
+        else {
+                statusMudou(Semaforo::ALERTA);
+                Led::desligar(pinoLed);
+                conectar();
+                return (false);
         }
 }
 
@@ -67,25 +64,7 @@ ComunicacaoMovel::desconectar(void) {
         if (!clienteGSM.connected())
                 clienteGSM.stop();
         gsm.shutdown();
-}
-
-void
-ComunicacaoMovel::ler(void) {
-        String respostaHTTP = "";
-        bool teste = true;
-        
-        while (teste) {
-                if (clienteGSM.available()) {
-                        char caractere = clienteGSM.read();
-                        respostaHTTP += caractere;
-                        char caractereResposta[respostaHTTP.length() + 1];
-                        respostaHTTP.toCharArray(caractereResposta, respostaHTTP.length() + 1);
-                        if (strstr(caractereResposta, "200 OK") != NULL) {
-                                Serial.println(caractereResposta);
-                        }
-                }
-                teste = false;
-        }
+        delay(5000);
 }
 
 Status *
