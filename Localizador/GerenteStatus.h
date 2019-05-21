@@ -13,9 +13,9 @@ public:
         ~GerenteStatus();
         
         static GerenteStatus *obterInstancia(int);
-        void atualizarStatusGlobal(IStatusProdutor &produtor);
-        void adicionar(IStatusProdutor &produtor) override;
-        void notificar(Semaforo semaforo) override;
+        void atualizarStatusGlobal(IStatusProdutor &);
+        void adicionar(IStatusProdutor &) override;
+        void notificar(Semaforo) override;
 
 private:
         static GerenteStatus *instancia;

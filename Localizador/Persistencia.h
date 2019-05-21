@@ -9,7 +9,7 @@
 class Persistencia : public IStatusProdutor
 {
 public:
-        Persistencia(String nomeArquivo, uint8_t pino, Status *status);
+        Persistencia(String, uint8_t, Status *);
         ~Persistencia();
         
         void inicializar(void);

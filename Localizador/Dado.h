@@ -10,7 +10,7 @@
 class Dado : public IStatusProdutor
 {
 public:
-        Dado(uint8_t pinoLed, Status *status);
+        Dado(uint8_t, Status *);
         ~Dado();
 
         void inicializar(void);
@@ -42,7 +42,7 @@ private:
         bool atualizado;
 
         bool construir(void);
-        String getDado(String mensagem, char separador, int indice);
+        String getDado(String, char, int);
 };
 
 #endif

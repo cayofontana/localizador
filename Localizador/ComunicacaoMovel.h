@@ -12,11 +12,11 @@ const int maximoTentativaConexoes = 30;
 class ComunicacaoMovel : public IStatusProdutor
 {
 public:
-        ComunicacaoMovel(const char *GPRS_APN, const char *GPRS_USUARIO, const char *GPRS_SENHA, const char *servidor, const char *endereco, uint8_t porta, uint8_t pinoLed, Status *status);
+        ComunicacaoMovel(const char *, const char *, const char *, const char *, const char *, uint8_t, uint8_t, Status *);
         ~ComunicacaoMovel();
 
         void inicializar(void);
-        bool enviar(Dado *dado);
+        bool enviar(Dado *);
         virtual Status *getStatus(void) override;
         virtual void statusMudou(Semaforo) override;
         
@@ -34,9 +34,8 @@ private:
         uint8_t pinoLed;
 
         bool conectar(void);
-        void enviar(const char *strHttpQueryString);
+        void enviar(const char *);
         void desconectar(void);
-        void ler(void);
 };
 
 #endif
