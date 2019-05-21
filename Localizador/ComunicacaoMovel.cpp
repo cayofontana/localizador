@@ -39,19 +39,7 @@ ComunicacaoMovel::conectar(void) {
 
 bool
 ComunicacaoMovel::enviar(Dado *dado) {
-        int i, maximo;
-
-        for (i = 0, maximo = 10; !clienteGSM.connected() && !clienteGSM.connect(servidor, 8080) && i < maximo; ++i) {
-                statusMudou(Semaforo::ALERTA);
-                delay(5000);
-        }
-
-        if (i == maximo) {
-                statusMudou(Semaforo::ALERTA);
-                conectar();
-                return (false);
-        }
-        else {
+        if (clienteGSM.connected() || clienteGSM.connect(servidor, 8080)) {
                 Led::ligar(pinoLed);                        
                 String strHttpQueryString = dado->toHTTPQueryString();                
                 clienteGSM.print("GET ");
@@ -61,6 +49,12 @@ ComunicacaoMovel::enviar(Dado *dado) {
                 statusMudou(Semaforo::NORMAL);
                 Led::desligar(pinoLed);
                 return (true);
+                clienteGSM.stop();
+        }
+        else {
+                statusMudou(Semaforo::ALERTA);
+                conectar();
+                return (false);
         }
 }
 
