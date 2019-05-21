@@ -39,8 +39,8 @@ ComunicacaoMovel::conectar(void) {
 
 bool
 ComunicacaoMovel::enviar(Dado *dado) {
-        Led::ligar(pinoLed);
         if (clienteGSM.connected() || conectar()) {
+                Led::ligar(pinoLed);
                 if (clienteGSM.connect(servidor, 8080)) {
                         String strHttpQueryString = dado->toHTTPQueryString();
                         
