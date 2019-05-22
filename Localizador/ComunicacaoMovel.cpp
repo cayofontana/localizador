@@ -39,17 +39,19 @@ ComunicacaoMovel::conectar(void) {
 
 bool
 ComunicacaoMovel::enviar(Dado *dado) {
-        if (clienteGSM.connected() || clienteGSM.connect(servidor, 8080)) {
+        if (clienteGSM.connect(servidor, 8080)) {
                 Led::ligar(pinoLed);                        
                 String strHttpQueryString = dado->toHTTPQueryString();                
                 clienteGSM.print("GET ");
                 clienteGSM.print(endereco + strHttpQueryString);
                 clienteGSM.println(" HTTP/1.0");
                 clienteGSM.println();
+                delay(2000);
+                clienteGSM.flush();
+                clienteGSM.stop();
                 statusMudou(Semaforo::NORMAL);
                 Led::desligar(pinoLed);
                 return (true);
-                clienteGSM.stop();
         }
         else {
                 statusMudou(Semaforo::ALERTA);
