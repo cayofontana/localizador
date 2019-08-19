@@ -16,9 +16,7 @@ Led::notificar(Semaforo semaforo) {
                         digitalWrite((int) semaforo, HIGH);
                         break;
                 case Semaforo::ATENCAO:
-                        //digitalWrite((int) semaforo, HIGH);
-                        digitalWrite((int) Semaforo::NORMAL, HIGH);
-                        digitalWrite((int) Semaforo::ALERTA, HIGH);
+                        digitalWrite((int) semaforo, HIGH);
                         break;
                 case Semaforo::ALERTA:
                         digitalWrite((int) semaforo, HIGH);
