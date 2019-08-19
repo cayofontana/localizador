@@ -6,8 +6,8 @@
 #include "Util.h"
 
 GerenteStatus *gerenteStatus = GerenteStatus::obterInstancia(3);
-Persistencia persistencia("dado_gps.txt", 4, new Status(gerenteStatus));
-Dado dado(7, new Status(gerenteStatus));
+Persistencia persistencia("dado_gps.txt", 7, new Status(gerenteStatus));
+Dado dado(4, new Status(gerenteStatus));
 ComunicacaoMovel comunicacaoMovel("zap.vivo.com.br", "vivo", "vivo", "201.140.232.146", "/cadastrodadogps.jsp?", 8080, 5, new Status(gerenteStatus));
 
 void setup() {
@@ -29,7 +29,8 @@ void loop() {
                 dado.obterMensagemGPS();
                 if (dado.leituraCompletou() && dado.atualizou()) {
                         persistencia.salvar(&dado);
-                        persistencia.listar();
+                        // USADO APENAS PARA CHECAGEM NO SERIAL MONITOR DO ARDUINO IDE
+                        // persistencia.listar();
                         comunicacaoMovel.enviar(&dado);
                         dado.reiniciar();
                 }
