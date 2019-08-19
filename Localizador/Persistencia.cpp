@@ -34,7 +34,7 @@ Persistencia::salvar(Dado *dado) {
 }
 
 
-// MÉTODO USADO PARA TESte (SERIAL MONITOR)
+// MÉTODO USADO PARA TESTE (SERIAL MONITOR)
 void 
 Persistencia::listar(void) {
         arquivo = SD.open(nomeArquivo);
