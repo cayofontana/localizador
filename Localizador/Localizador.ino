@@ -8,7 +8,7 @@
 GerenteStatus *gerenteStatus = GerenteStatus::obterInstancia(3);
 Persistencia persistencia("dado_gps.txt", 7, new Status(gerenteStatus));
 Dado dado(4, new Status(gerenteStatus));
-ComunicacaoMovel comunicacaoMovel("zap.vivo.com.br", "vivo", "vivo", "201.140.235.188", "/cadastrodadogps.jsp?", 8080, 5, new Status(gerenteStatus));
+ComunicacaoMovel comunicacaoMovel("zap.vivo.com.br", "vivo", "vivo", "201.140.232.75", "/cadastrodadogps.jsp?", 8080, 5, new Status(gerenteStatus));
 
 void setup() {
         Serial.begin(9600);
@@ -19,8 +19,7 @@ void setup() {
         gerenteStatus->adicionar(dado);
         gerenteStatus->adicionar(comunicacaoMovel);
         
-        dado.inicializar();
-        comunicacaoMovel.inicializar();
+        dado.inicializar();     
         persistencia.inicializar();
 }
 
