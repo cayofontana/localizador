@@ -7,15 +7,12 @@
 
 #define CODIGO_PIN ""
 
-const int maximoTentativaConexoes = 30;
-
 class ComunicacaoMovel : public IStatusProdutor
 {
 public:
         ComunicacaoMovel(const char *, const char *, const char *, const char *, const char *, uint8_t, uint8_t, Status *);
         ~ComunicacaoMovel();
 
-        void inicializar(void);
         bool enviar(Dado *);
         virtual Status *getStatus(void) override;
         virtual void statusMudou(Semaforo) override;
@@ -34,7 +31,6 @@ private:
         uint8_t pinoLed;
 
         bool conectar(void);
-        void enviar(const char *);
         void desconectar(void);
 };
 
