@@ -10,6 +10,7 @@ ComunicacaoMovel::ComunicacaoMovel(const char* gprsAPN, const char* gprsUsuario,
 
 ComunicacaoMovel::~ComunicacaoMovel() {
         desconectar();
+        delete status;
 }
 
 bool

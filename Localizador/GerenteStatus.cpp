@@ -14,6 +14,8 @@ GerenteStatus::GerenteStatus() {
 }
 
 GerenteStatus::~GerenteStatus() {
+        delete produtores;
+        delete instancia;
 }
 
 GerenteStatus*
@@ -25,7 +27,6 @@ GerenteStatus::obterInstancia() {
 
 void
 GerenteStatus::atualizarStatusGlobal(IStatusProdutor* produtor) {
-        
         Semaforo semaforoAtual = semaforoStatusGlobal;
 
         if (produtor->getStatus()->getSemaforo() != semaforoStatusGlobal)

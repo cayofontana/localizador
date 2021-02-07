@@ -34,12 +34,10 @@ private:
         Status* status;
         GerenteStatus& gerenteStatus;
         uint8_t pinoLed;
-
         unsigned long testeAnterior;
         bool proximaLeitura;
         bool leituraParada;
         String mensagem;
-
         bool atualizado;
 
         bool construir(void);
