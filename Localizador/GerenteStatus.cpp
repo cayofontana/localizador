@@ -5,23 +5,19 @@ GerenteStatus* GerenteStatus::instancia = 0;
 
 GerenteStatus::GerenteStatus() {
         semaforoStatusGlobal = Semaforo::ATENCAO;
-
         // LEDS SENDO INICIALIZADOS, PALIATIVAMENTE, NO CONSTRUTOR DE GERENTESTATUS.
         // ESTE TRECHO DEVE SER MOVIDO PARA DENTRO DO MÉTODO setup() DO ARQUIVO .ino
         Led::inicializar();
         Led::limpar();
-        // FIM DO TRECHO
-        
+        // FIM DO TRECHO        
         notificar(semaforoStatusGlobal);
 }
 
 GerenteStatus::~GerenteStatus() {
-        
 }
 
 GerenteStatus*
-GerenteStatus::obterInstancia()
-{
+GerenteStatus::obterInstancia() {
         if (instancia == 0)
                 instancia = new GerenteStatus();
         return (instancia);
@@ -45,7 +41,7 @@ GerenteStatus::atualizarStatusGlobal(IStatusProdutor* produtor) {
 
 void
 GerenteStatus::adicionar(IStatusProdutor* produtor) {
-          produtores.push_back(produtor);
+        produtores.push_back(produtor);
 }
 
 void

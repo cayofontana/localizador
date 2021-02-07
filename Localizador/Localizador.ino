@@ -11,11 +11,11 @@ Dado dado(4, *gerenteStatus);
 ComunicacaoMovel comunicacaoMovel("zap.vivo.com.br", "vivo", "vivo", "201.140.232.75", "/cadastrodadogps.jsp?", 8080, 5, *gerenteStatus);
 
 void setup() {
-        Serial.begin(9600);
+//        Serial.begin(9600);
         // USADO PARA USB-CDC APENAS
 //        while (!Serial)
-//                continue;        
-        dado.inicializar();     
+//                continue;
+        dado.inicializar();
         persistencia.inicializar();
 }
 

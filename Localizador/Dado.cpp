@@ -1,13 +1,15 @@
 #include "Dado.h"
 
 Dado::Dado(uint8_t pinoLed, GerenteStatus& gerenteStatus) : pinoLed(pinoLed), gerenteStatus(gerenteStatus) {
-        status = new Status(&gerenteStatus);
-        pinMode(pinoLed, OUTPUT);
         testeAnterior = 0;
         proximaLeitura = false;
         leituraParada = false;
         mensagem = "";
         atualizado = false;
+        status = new Status(&gerenteStatus);
+
+        pinMode(pinoLed, OUTPUT);
+        this->gerenteStatus.adicionar(this);
 }
 
 Dado::~Dado() {
@@ -48,7 +50,7 @@ Dado::obterMensagemGPS() {
 
 bool
 Dado::leituraCompletou(void) {
-        if (proximaLeitura)   {
+        if (proximaLeitura) {
                 if (mensagem.startsWith("$GPRMC")) {
                         if (construir())
                                 atualizado = true;

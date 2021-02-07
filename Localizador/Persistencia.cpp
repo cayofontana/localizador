@@ -2,6 +2,8 @@
 
 Persistencia::Persistencia(String nomeArquivo, uint8_t pino, GerenteStatus& gerenteStatus) : nomeArquivo(nomeArquivo), pino(pino), gerenteStatus(gerenteStatus) {
         status = new Status(&gerenteStatus);
+        
+        this->gerenteStatus.adicionar(this);
 }
 
 Persistencia::~Persistencia() {

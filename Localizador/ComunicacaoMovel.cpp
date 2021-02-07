@@ -3,8 +3,9 @@
 
 ComunicacaoMovel::ComunicacaoMovel(const char* gprsAPN, const char* gprsUsuario, const char* gprsSenha, const char* servidor, const char* endereco, uint8_t porta, uint8_t pinoLed, GerenteStatus& gerenteStatus) : gprsAPN(gprsAPN), gprsUsuario(gprsUsuario), gprsSenha(gprsSenha), servidor(servidor), endereco(endereco), porta(porta), pinoLed(pinoLed), gerenteStatus(gerenteStatus) {
         status = new Status(&gerenteStatus);
+        
         pinMode(pinoLed, OUTPUT);
-        gerenteStatus.adicionar(this);
+        this->gerenteStatus.adicionar(this);
 }
 
 ComunicacaoMovel::~ComunicacaoMovel() {
