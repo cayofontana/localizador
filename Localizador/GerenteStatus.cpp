@@ -14,7 +14,6 @@ GerenteStatus::GerenteStatus() {
 }
 
 GerenteStatus::~GerenteStatus() {
-        delete produtores;
         delete instancia;
 }
 
@@ -27,17 +26,19 @@ GerenteStatus::obterInstancia() {
 
 void
 GerenteStatus::atualizarStatusGlobal(IStatusProdutor* produtor) {
-        Semaforo semaforoAtual = semaforoStatusGlobal;
+        Semaforo _semaforoStatusGlobal = semaforoStatusGlobal;
 
-        if (produtor->getStatus()->getSemaforo() != semaforoStatusGlobal)
-                semaforoStatusGlobal = produtor->getStatus()->getSemaforo();
+        if (produtor->getStatus()->getSemaforo() != _semaforoStatusGlobal)
+                _semaforoStatusGlobal = produtor->getStatus()->getSemaforo();
 
         for (std::list<IStatusProdutor*>::iterator _produtor = produtores.begin(); _produtor != produtores.end(); ++_produtor)
-                if (*_produtor != produtor && (*_produtor)->getStatus()->getSemaforo() > semaforoStatusGlobal)
-                        semaforoStatusGlobal = (*_produtor)->getStatus()->getSemaforo();
+                if (*_produtor != produtor && (*_produtor)->getStatus()->getSemaforo() > _semaforoStatusGlobal)
+                        _semaforoStatusGlobal = (*_produtor)->getStatus()->getSemaforo();
     
-        if (semaforoAtual != semaforoStatusGlobal)
+        if (semaforoStatusGlobal != _semaforoStatusGlobal) {
+                semaforoStatusGlobal = _semaforoStatusGlobal;
                 notificar(semaforoStatusGlobal);
+        }
 }
 
 void
