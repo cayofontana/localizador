@@ -1,16 +1,10 @@
 #include "ComunicacaoMovel.h"
 
 
-ComunicacaoMovel::ComunicacaoMovel(const char *gprsAPN, const char *gprsUsuario, const char *gprsSenha, const char *servidor, const char *endereco, uint8_t porta, uint8_t pinoLed, Status *status) {
-        this->gprsAPN = gprsAPN;
-        this->gprsUsuario = gprsUsuario;
-        this->gprsSenha = gprsSenha;
-        this->servidor = servidor;
-        this->endereco = endereco;
-        this->porta = porta;
-        this->status = status;
-        this->pinoLed = pinoLed;
+ComunicacaoMovel::ComunicacaoMovel(const char* gprsAPN, const char* gprsUsuario, const char* gprsSenha, const char* servidor, const char* endereco, uint8_t porta, uint8_t pinoLed, GerenteStatus& gerenteStatus) : gprsAPN(gprsAPN), gprsUsuario(gprsUsuario), gprsSenha(gprsSenha), servidor(servidor), endereco(endereco), porta(porta), pinoLed(pinoLed), gerenteStatus(gerenteStatus) {
+        status = new Status(&gerenteStatus);
         pinMode(pinoLed, OUTPUT);
+        gerenteStatus.adicionar(this);
 }
 
 ComunicacaoMovel::~ComunicacaoMovel() {
@@ -18,7 +12,7 @@ ComunicacaoMovel::~ComunicacaoMovel() {
 }
 
 bool
-ComunicacaoMovel::enviar(Dado *dado) {
+ComunicacaoMovel::enviar(Dado* dado) {
         if (conectar() && clienteGSM.connect(servidor, 8080)) {
                 Led::ligar(pinoLed);                        
                 String strHttpQueryString = dado->toHTTPQueryString();                
@@ -58,7 +52,7 @@ ComunicacaoMovel::desconectar(void) {
         delay(5000);
 }
 
-Status *
+Status*
 ComunicacaoMovel::getStatus(void) {
         return (status);
 }
@@ -66,5 +60,5 @@ ComunicacaoMovel::getStatus(void) {
 void
 ComunicacaoMovel::statusMudou(Semaforo semaforo) {
         status->setSemaforo(semaforo);
-        status->notificarGerente(dynamic_cast<IStatusProdutor&>(*this));
+        status->notificarGerente(this);
 }

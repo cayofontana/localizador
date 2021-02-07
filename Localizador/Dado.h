@@ -10,7 +10,7 @@
 class Dado : public IStatusProdutor
 {
 public:
-        Dado(uint8_t, Status *);
+        Dado(uint8_t, GerenteStatus&);
         ~Dado();
 
         void inicializar(void);
@@ -20,7 +20,7 @@ public:
         String toHTTPQueryString(void);
         bool atualizou(void);
         void reiniciar(void);
-        virtual Status *getStatus(void) override;
+        virtual Status* getStatus(void) override;
         virtual void statusMudou(Semaforo) override;
         
 private:
@@ -31,7 +31,8 @@ private:
         String velocidade;
         String data;
         String hora;
-        Status *status;
+        Status* status;
+        GerenteStatus& gerenteStatus;
         uint8_t pinoLed;
 
         unsigned long testeAnterior;

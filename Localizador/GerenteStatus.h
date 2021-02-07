@@ -2,6 +2,7 @@
 #define GERENTESTATUS_H
 
 #include <stdlib.h>
+#include <list>
 #include "IStatusProdutor.h"
 #include "IStatusConsumidor.h"
 #include "Semaforo.h"
@@ -12,18 +13,17 @@ class GerenteStatus : public IStatusConsumidor
 public:
         ~GerenteStatus();
         
-        static GerenteStatus *obterInstancia(int);
-        void atualizarStatusGlobal(IStatusProdutor &);
-        void adicionar(IStatusProdutor &) override;
+        static GerenteStatus* obterInstancia();
+        void atualizarStatusGlobal(IStatusProdutor*);
+        void adicionar(IStatusProdutor*) override;
         void notificar(Semaforo) override;
 
 private:
-        static GerenteStatus *instancia;
-        IStatusProdutor **produtores;
-        int quantidade_produtores;
+        static GerenteStatus* instancia;
+        std::list<IStatusProdutor*> produtores;
         Semaforo semaforoStatusGlobal;
 
-        GerenteStatus(int);
+        GerenteStatus();
 };
 
 #endif

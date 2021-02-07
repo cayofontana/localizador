@@ -1,9 +1,7 @@
 #include "Persistencia.h"
 
-Persistencia::Persistencia(String nomeArquivo, uint8_t pino, Status *status) : status(status) {
-        this->nomeArquivo = nomeArquivo;
-        this->pino = pino;
-        this->status = status;
+Persistencia::Persistencia(String nomeArquivo, uint8_t pino, GerenteStatus& gerenteStatus) : nomeArquivo(nomeArquivo), pino(pino), gerenteStatus(gerenteStatus) {
+        status = new Status(&gerenteStatus);
 }
 
 Persistencia::~Persistencia() {
@@ -18,7 +16,7 @@ Persistencia::inicializar(void) {
 }
 
 bool
-Persistencia::salvar(Dado *dado) {
+Persistencia::salvar(Dado* dado) {
         arquivo = SD.open(nomeArquivo, FILE_WRITE);
         
         if (arquivo) {
@@ -47,7 +45,7 @@ Persistencia::listar(void) {
         }
 }
 
-Status *
+Status*
 Persistencia::getStatus(void) {
         return (status);
 }
@@ -55,5 +53,5 @@ Persistencia::getStatus(void) {
 void
 Persistencia::statusMudou(Semaforo semaforo) {
         status->setSemaforo(semaforo);
-        status->notificarGerente(dynamic_cast<IStatusProdutor&>(*this));
+        status->notificarGerente(this);
 }

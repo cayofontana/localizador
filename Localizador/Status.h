@@ -8,16 +8,16 @@
 class Status
 {
 public:
-        Status(GerenteStatus *);
+        Status(GerenteStatus*);
         ~Status();
 
         void limpar(void);
         Semaforo getSemaforo(void);
         void setSemaforo(Semaforo);
-        void notificarGerente(IStatusProdutor &);
+        void notificarGerente(IStatusProdutor*);
 
 private:
-        GerenteStatus *gerenteStatus;
+        GerenteStatus* gerenteStatus;
         Semaforo semaforo;
 
 };

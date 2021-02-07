@@ -9,18 +9,19 @@
 class Persistencia : public IStatusProdutor
 {
 public:
-        Persistencia(String, uint8_t, Status *);
+        Persistencia(String, uint8_t, GerenteStatus&);
         ~Persistencia();
         
         void inicializar(void);
-        bool salvar(Dado *);
+        bool salvar(Dado*);
         void listar(void);
-        virtual Status *getStatus(void) override;
+        virtual Status* getStatus(void) override;
         virtual void statusMudou(Semaforo) override;
 
 private:
       File arquivo;
-      Status *status;
+      Status* status;
+      GerenteStatus& gerenteStatus;
       String nomeArquivo;
       uint8_t pino;
 };

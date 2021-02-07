@@ -3,9 +3,7 @@
 
 GerenteStatus* GerenteStatus::instancia = 0;
 
-GerenteStatus::GerenteStatus(int quantidade_produtores) {
-        this->quantidade_produtores = 0;
-        produtores = new IStatusProdutor *[quantidade_produtores];
+GerenteStatus::GerenteStatus() {
         semaforoStatusGlobal = Semaforo::ATENCAO;
 
         // LEDS SENDO INICIALIZADOS, PALIATIVAMENTE, NO CONSTRUTOR DE GERENTESTATUS.
@@ -21,33 +19,33 @@ GerenteStatus::~GerenteStatus() {
         
 }
 
-GerenteStatus *
-GerenteStatus::obterInstancia(int quantidade_produtores)
+GerenteStatus*
+GerenteStatus::obterInstancia()
 {
         if (instancia == 0)
-                instancia = new GerenteStatus(quantidade_produtores);
+                instancia = new GerenteStatus();
         return (instancia);
 }
 
 void
-GerenteStatus::atualizarStatusGlobal(IStatusProdutor &produtor) {
+GerenteStatus::atualizarStatusGlobal(IStatusProdutor* produtor) {
         
         Semaforo semaforoAtual = semaforoStatusGlobal;
 
-        if (dynamic_cast<IStatusProdutor&>(produtor).getStatus()->getSemaforo() != semaforoStatusGlobal)
-                semaforoStatusGlobal = dynamic_cast<IStatusProdutor&>(produtor).getStatus()->getSemaforo();
+        if (produtor->getStatus()->getSemaforo() != semaforoStatusGlobal)
+                semaforoStatusGlobal = produtor->getStatus()->getSemaforo();
 
-        for (int i = 0; i < quantidade_produtores; ++i)
-                if (produtores[i] != &produtor && produtores[i]->getStatus()->getSemaforo() > semaforoStatusGlobal)
-                        semaforoStatusGlobal = produtores[i]->getStatus()->getSemaforo();
+        for (std::list<IStatusProdutor*>::iterator _produtor = produtores.begin(); _produtor != produtores.end(); ++_produtor)
+                if (*_produtor != produtor && (*_produtor)->getStatus()->getSemaforo() > semaforoStatusGlobal)
+                        semaforoStatusGlobal = (*_produtor)->getStatus()->getSemaforo();
     
         if (semaforoAtual != semaforoStatusGlobal)
                 notificar(semaforoStatusGlobal);
 }
 
 void
-GerenteStatus::adicionar(IStatusProdutor &produtor) {
-          produtores[quantidade_produtores++] = &produtor;
+GerenteStatus::adicionar(IStatusProdutor* produtor) {
+          produtores.push_back(produtor);
 }
 
 void

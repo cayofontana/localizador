@@ -1,9 +1,8 @@
 #include "Dado.h"
 
-Dado::Dado(uint8_t pinoLed, Status *status) : status(status) {
-        this->pinoLed = pinoLed;
+Dado::Dado(uint8_t pinoLed, GerenteStatus& gerenteStatus) : pinoLed(pinoLed), gerenteStatus(gerenteStatus) {
+        status = new Status(&gerenteStatus);
         pinMode(pinoLed, OUTPUT);
-        this->status = status;
         testeAnterior = 0;
         proximaLeitura = false;
         leituraParada = false;
@@ -117,7 +116,7 @@ Dado::getDado(String mensagem, char separador, int vezesOcorrencia)
         return (mensagemParcial.substring(0, indiceFinal));
 }
 
-Status *
+Status*
 Dado::getStatus(void) {
         return (status);
 }
@@ -125,5 +124,5 @@ Dado::getStatus(void) {
 void
 Dado::statusMudou(Semaforo semaforo) {
         status->setSemaforo(semaforo);
-        status->notificarGerente(dynamic_cast<IStatusProdutor&>(*this));
+        status->notificarGerente(this);
 }
